@@ -2,6 +2,14 @@
 
 A professional, standalone web application for managing technical maintenance, medical equipment, and engineering workflows.
 
+
+#Project overview for some pages
+![Log in Preview](./screenshots/1.png)
+![Dashboard Preview](./screenshots/2.png)
+![Dark mode Preview](./screenshots/3.png)
+![Add Equipment Preview](./screenshots/Screenshot_1.png)
+
+
 ## 🚀 Features
 
 -   **Dynamic Dashboard:** Real-time KPIs (MTBF, MTTR, PM Compliance, and Downtime %).
@@ -27,8 +35,4 @@ Since this is a client-side web application, you only need:
 ├── assets/              # (Optional) Folder for images or icons
 └── README.md            # Project documentation
 
-#Project overview for some pages
-![Log in Preview](./screenshots/1.png)
-![Dashboard Preview](./screenshots/2.png)
-![Dark mode Preview](./screenshots/3.png)
-![Add Equipment Preview](./screenshots/Screenshot_1.png)
+
