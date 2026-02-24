@@ -1,0 +1,107 @@
+:root{--blue:#004aad;--muted:#f3f4f6;--card:#fff}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--muted);color:#111}
+    .login-card{max-width:420px;margin:60px auto;padding:24px;background:var(--card);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.06)}
+    input,select,button{width:100%;padding:10px;margin-top:8px;border-radius:8px;border:1px solid #e6e6e6}
+    button{background:var(--blue);border:none;color:#fff;font-weight:600;cursor:pointer}
+    nav.sidebar{overflow-y:auto;position:fixed;left:0;top:0;height:100%;width:72px;background:var(--blue);display:flex;flex-direction:column;align-items:center;padding-top:18px;transition:width .28s ease}
+    nav.sidebar.expanded{width:240px}
+    .nav-header{width:100%;display:flex;align-items:center;padding:8px 12px;gap:8px}
+    .hamburger{background:transparent;border:none;color:white;font-size:20px;cursor:pointer}
+    .dark-toggle{margin-left:auto;background:transparent;border:1px solid rgba(255,255,255,0.12);color:white;padding:6px 8px;border-radius:8px;cursor:pointer}
+    .logo-text{color:white;font-weight:700;margin-left:6px;opacity:0;transition:opacity .25s}
+    nav.expanded .logo-text{opacity:1}
+    ul.nav-links{list-style:none;padding:0;margin:18px 0;width:100%}
+    ul.nav-links li{display:flex;align-items:center;gap:12px;padding:12px 16px;color:white;cursor:pointer;border-radius:8px;margin:6px;transition:background .18s}
+    ul.nav-links li:hover{background:rgba(255,255,255,0.08)}
+    ul.nav-links li i{font-style:normal;width:28px;text-align:center}
+    nav.collapsed ul.nav-links li span{display:none}
+    #content{margin-left:88px;padding:28px;transition:margin-left .28s ease}
+    nav.expanded + #content{margin-left:260px}
+    .page{opacity:0;transform:translateY(6px);transition:opacity .28s,transform .28s;display:none}
+    .page.active{display:block;opacity:1;transform:none}
+    table{width:100%;border-collapse:collapse;background:white;border-radius:8px;overflow:hidden}
+    th,td{padding:12px;border-bottom:1px solid #f0f0f0;text-align:left}
+    .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+    .card{background:white;padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
+    @media(max-width:800px){nav.sidebar{left:-240px;position:fixed}nav.sidebar.open{left:0}nav.expanded{width:220px}#content{margin-left:0;padding:18px}}
+    body.dark{background:#0f1720;color:#e6eef8}
+    body.dark .card, body.dark table{background:#0b1320;color:#e6eef8}
+    body.dark nav.sidebar{background:#081426}
+    .small{font-size:13px;color:#666}
+    .notif{font-size:13px;padding:6px;border-radius:6px;margin-bottom:6px}
+.btn-primary {
+    background:#0275d8;
+    color:white;
+    padding:8px 14px;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.btn-primary:hover {
+    background:#025aa5;
+}
+
+.modal select, .modal input {
+    padding:6px;
+    border:1px solid #ccc;
+    border-radius:4px;
+}
+
+#menuBtn{
+    display:block;
+    left:-200px;
+    z-index:3000;
+    background:#004aad;
+    color:#fff;
+    border:none;
+    font-size:18px;
+    cursor:pointer;
+  }
+ 
+#menuBtn2{
+  display:none;
+}
+
+@media (max-width:800px){
+  
+  #menuBtn2{
+    display:block;
+    position:fixed;
+    top:14px;
+    left:14px;
+    z-index:3000;
+    background:#004aad;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    padding:8px 10px;
+    font-size:18px;
+    cursor:pointer;
+  }
+  nav.sidebar{
+    position:fixed;
+    top:0;
+    left:0;              /* لا تكون خارج الشاشة */
+    width:72px;          /* نفس عرض collapsed */
+    transform:translateX(-72px);  /* مخفية */
+    transition:transform .25s ease;
+    z-index:2000;
+  }
+
+  nav.sidebar.open{
+    transform:translateX(0);   /* تظهر */
+  }
+
+  #content{
+    margin-left:0;
+    transition:margin-left .25s ease;
+  }
+
+  nav.sidebar.open + #content{
+    margin-left:72px;   /* المحتوى يتحرك قليلاً */
+  }
+
+}

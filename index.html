@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CMMS Frontend — Stable Preview</title>
+   <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage" class="login-card" style="display:block">
+  <h2 style="text-align:center;margin-bottom:12px">CMMS Login</h2>
+  <form id="loginForm">
+    <input id="loginEmail" type="email" placeholder="Email (e.g. admin@cmms.com)" required>
+    <input id="loginPass" type="password" placeholder="Password (e.g. admin123)" required>
+   <!-- <div style="margin-top:8px;font-size:13px;color:#444">Demo accounts: admin@cmms.com/admin123, eng@cmms.com/eng123, tech@cmms.com/tech123, manager@cmms.com/mgr123</div> -->
+    <button type="submit">Login</button>
+  </form>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+  <button id="menuBtn2" class="hamburger">☰</button>
+  <nav class="sidebar collapsed" id="sidebar">
+    <div class="nav-header">
+      <button id="menuBtn" class="hamburger">☰</button>
+      <button id="darkBtn" class="dark-toggle">🌙</button>
+      <span class="logo-text">CMMS</span>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li data-page="dashboard"><i>🏠</i><span>Dashboard</span></li>
+      <li data-page="equipment"><i>🧾</i><span>Equipment</span></li>
+      <li data-page="workorders"><i>🛠️</i><span>Work Orders</span></li>
+      <li data-page="add-equipment"><i>➕</i><span>Add Equipment</span></li>
+      <li data-page="pm"><i>📅</i><span>PM</span></li>
+      <li data-page="cm"><i>⚠️</i><span>CM</span></li>
+      <li data-page="pdm"><i>📈</i><span>PdM</span></li>
+      <li data-page="spare-parts"><i>⚙️</i><span>Spare Parts</span></li>
+      <li data-page="purchase-orders"><i>🧾</i><span>Purchase Orders</span></li>
+      <li data-page="vendors"><i>🏷️</i><span>Vendors</span></li>
+      <li data-page="audit"><i>📜</i><span>Audit Trails</span></li>
+      <li data-page="equipment-kpi"><i>📊</i><span>Equipment KPIs</span></li>
+      <li data-page="users"><i>👤</i><span>Users</span></li>
+      <li data-page="integrations"><i>🔌</i><span>Integrations</span></li>
+      <li id="logoutBtn"><i>↩️</i><span>Logout</span></li>
+    </ul>
+  </nav>
+   
+  <main id="content">
+    <section id="dashboard" class="page active">
+      <h2>Dashboard — KPIs</h2>
+      <div class="card-grid">
+        <div class="card"><div class="small">MTBF (days)</div><div id="kpi_mtbf" style="font-size:20px;font-weight:700">—</div></div>
+        <div class="card"><div class="small">MTTR (hrs)</div><div id="kpi_mttr" style="font-size:20px;font-weight:700">—</div></div>
+        <div class="card"><div class="small">PM Compliance</div><div id="kpi_pmcomp" style="font-size:20px;font-weight:700">—</div></div>
+        <div class="card"><div class="small">Equipment Downtime (%)</div><div id="kpi_downtime" style="font-size:20px;font-weight:700">—</div></div>
+        <div class="card"><div class="small">Cost / Device / Year</div><div id="kpi_cost" style="font-size:20px;font-weight:700">—</div></div>
+      </div>
+
+      <h2 style="margin-top:24px">Expected Technical Outcomes</h2>
+      <div class="card-grid">
+        <div class="card"><div class="small">Total Devices</div><div id="tech_total_devices" style="font-size:20px;font-weight:700">—</div></div>
+        <div class="card"><div class="small">Complete Profiles (%)</div><div id="tech_complete_profiles" style="font-size:20px;font-weight:700">—</div></div>
+        <div class="card"><div class="small">Incomplete Profiles</div><div id="tech_incomplete_profiles" style="font-size:20px;font-weight:700">—</div></div>
+        <div class="card"><div class="small">Downtime Improvement (%)</div><div id="tech_dt_improvement" style="font-size:20px;font-weight:700">—</div></div>
+        <div class="card"><div class="small">PM Compliance Target</div><div id="tech_pm_target" style="font-size:20px;font-weight:700">95%</div></div>
+        <div class="card"><div class="small">Replacement Alerts</div><div id="tech_replacement_alerts" style="font-size:20px;font-weight:700">—</div></div>
+        <div class="card"><div class="small">ISO/JCI Status</div><div id="tech_regulatory" style="font-size:20px;font-weight:700">—</div></div>
+      </div>
+    </section>
+
+    <section id="equipment" class="page">
+      <h2>Equipment Registry</h2>
+      <input id="searchEquip" placeholder="Search equipment..." style="padding:8px;border-radius:8px;border:1px solid #eee;margin-bottom:12px;width:100%">
+      <div class="card">
+        <table id="equipmentTable" style="margin-top:20px">
+          <thead><tr><th>ID</th><th>Category</th><th>Model</th><th>Serial</th><th>Location</th><th>Risk</th><th>Age</th><th>Warranty</th><th>Next PM</th></tr></thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+<!-- Equipment Cards for Mobile -->
+
+
+<section id="workorders" class="page">
+      <h2>Work Orders</h2>
+      <div class="card">
+        <table id="woTable"><thead><tr><th>WO</th><th>Type</th><th>Equip</th><th>Status</th><th>Tech</th><th>Action</th></tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+
+    <section id="add-equipment" class="page">
+      <h2>Add Equipment</h2>
+      <div class="card">
+        <form id="addForm">
+          <input id="deviceID" placeholder="Unique Equipment ID (barcode/QR)" required>
+          <input id="category" placeholder="Device Category (e.g., Ventilator)" required>
+          <input id="manufacturer" placeholder="Manufacturer" required>
+          <input id="model" placeholder="Model" required>
+          <input id="serial" placeholder="Serial Number" required>
+
+          <label for="installDate">Installation Date</label>
+          <input id="installDate" type="date">
+
+          <label for="safetyTest">Electrical Safety Test Date (IEC 60601)</label>
+          <input id="safetyTest" type="date">
+
+          <label for="calibration">Calibration Requirement</label>
+          <select id="calibration">
+            <option>No Calibration Required</option>
+            <option>Requires Calibration</option>
+          </select>
+
+          <input id="warranty" placeholder="Warranty / Service Contracts">
+          <input id="annualCost" type="number" placeholder="Estimated annual cost (USD)" step="0.01">
+          <label for="risk">Risk level</label>
+          <select id="risk" placeholder="Manufacturer"><option>Low</option><option>Medium</option><option>High</option></select>
+
+          <button type="submit">Add Equipment</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="pm" class="page">
+      <h2>Preventive Maintenance (PM)</h2>
+      <div class="card">
+        <form id="pmForm">
+          <input id="pmEquip" placeholder="Equip ID" required>
+          <input id="pmInterval" type="number" placeholder="Interval days" value="90" required>
+          <input id="pmLast" type="date">
+          <input id="pmDocID" placeholder="PM Document ID (JCI)" required>
+          <input id="pmTechSign" placeholder="Technician Signature" required>
+          <label for="pmAssigned">Assign Technician</label>
+          <select id="pmAssigned" class="techSelect">
+            <option value="">Unassigned</option>
+          </select>
+
+          <button type="submit">Schedule</button>
+        </form>
+        <table id="pmTable"><thead><tr><th>Equip</th><th>Interval</th><th>Next Due</th></tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+
+    <section id="cm" class="page">
+      <h2>Corrective Maintenance (CM)</h2>
+      <div class="card">
+        <form id="cmForm">
+          <input id="cmEquip" placeholder="Equip ID" required>
+          <input id="cmRoot" placeholder="Root Cause (AAMI EQ56)" required>
+          <input id="cmSafety" placeholder="Safety Impact (IEC 60601)">
+          <input id="cmFail" placeholder="Failure" required>
+          <input id="cmAction" placeholder="Action" required>
+          <input id="cmParts" placeholder="Parts used">
+          <label for="cmAssigned">Assign Technician</label>
+          <select id="cmAssigned" class="techSelect">
+            <option value="">Unassigned</option>
+          </select>
+
+          <button type="submit">Log CM</button>
+        </form>
+        <table id="cmTable"><thead><tr><th>Equip</th><th>Failure</th><th>Action</th><th>Parts</th><th>Response</th></tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+
+    <section id="pdm" class="page">
+      <h2>Predictive Maintenance (PdM)</h2>
+      <div class="card">
+        <form id="pdmForm">
+          <input id="pdmEquip" placeholder="Equipment ID (e.g., EQ-001)" required>
+          <input id="calibDate" type="date" placeholder="Calibration Date">
+          <!-- PdM Parameter -->
+          <input
+            type="text"
+            id="pdmParam"
+            placeholder="Parameter (e.g. Vibration, Temperature)"
+            class="form-control"
+          />
+
+          <!-- PdM Threshold -->
+          <input
+            type="number"
+            id="pdmThreshold"
+            placeholder="Threshold"
+            class="form-control"
+          />
+
+          <label for="pdmAssigned">Assign Technician</label>
+          <select id="pdmAssigned" class="techSelect">
+            <option value="">Unassigned</option>
+          </select>
+
+          <button type="submit">Save Calibration</button>
+        </form>
+        <table id="pdmTable"><thead><tr><th>Equip</th><th>Cond</th><th>Status</th></tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+
+ <!-- SPARE PARTS MANAGEMENT (REPLACEMENT) -->
+<section id="spare-parts" class="page">
+  <h2>Spare Parts Management</h2>
+
+  <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <div>
+      <label style="font-weight:600">Search / Filter</label>
+      <input id="spareSearch" placeholder="Search by code, name, supplier..." style="min-width:360px;padding:6px">
+    </div>
+
+    <div style="display:flex;gap:8px;align-items:center">
+      <button id="exportSparesBtn" type="button">Export</button>
+      <button id="addSpareBtn" type="button">Add Spare</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:10px">
+    <h3>Spare Parts</h3>
+    <table id="sparesTable" style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr style="text-align:left">
+          <th style="width:110px">Code</th>
+          <th>Name</th>
+          <th style="width:160px">Supplier</th>
+          <th style="width:70px">Stock</th>
+          <th style="width:70px">Min</th>
+          <th style="width:120px">Location</th>
+          <th style="width:220px">Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:10px;display:grid;grid-template-columns:1fr 380px;gap:12px">
+    <div>
+      <h3>Suppliers</h3>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <button id="addSupplierBtn" type="button">Add Supplier</button>
+      </div>
+      <div id="suppliersList" style="background:#fff;border:1px solid #eee;padding:8px;max-height:320px;overflow:auto"></div>
+    </div>
+  </div>
+
+  <!-- modal container -->
+  <div id="spareModal" class="modal" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.4);align-items:center;justify-content:center;">
+    <div style="background:#fff;padding:16px;border-radius:6px;max-width:720px;width:92%">
+      <h3 id="spareModalTitle">Add / Edit Spare</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div>
+          <label>Code</label>
+          <input id="m_code" style="width:100%" />
+        </div>
+        <div>
+          <label>Name</label>
+          <input id="m_name" style="width:100%" />
+        </div>
+        <div>
+          <label>Supplier</label>
+          <select id="m_supplier" style="width:100%"></select>
+        </div>
+        <div>
+          <label>Stock Qty</label>
+          <input id="m_stock" type="number" style="width:100%" />
+        </div>
+        <div>
+          <label>Min Stock</label>
+          <input id="m_min" type="number" style="width:100%" />
+        </div>
+        <div>
+          <label>Location</label>
+          <input id="m_location" style="width:100%" />
+        </div>
+        <div style="grid-column:1 / -1">
+          <label>Description (optional)</label>
+          <textarea id="m_desc" rows="3" style="width:100%"></textarea>
+        </div>
+      </div>
+
+      <div style="margin-top:12px; display:flex;justify-content:flex-end;gap:8px">
+        <button id="spareModalCancel" type="button">Cancel</button>
+        <button id="spareModalSave" type="button">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- supplier modal -->
+  <div id="supplierModal" class="modal" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.4);align-items:center;justify-content:center;">
+    <div style="background:#fff;padding:12px;border-radius:6px;max-width:520px;width:92%">
+      <h3 id="supplierModalTitle">Add Supplier</h3>
+      <label>Supplier Name</label>
+      <input id="s_name" style="width:100%" />
+      <label>Email</label>
+      <input id="s_email" style="width:100%" />
+      <label>Endpoint (optional)</label>
+      <input id="s_endpoint" style="width:100%" />
+      <div style="margin-top:10px; display:flex;justify-content:flex-end;gap:8px">
+        <button id="supplierCancel" type="button">Cancel</button>
+        <button id="supplierSave" type="button">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- toast -->
+  <div id="spareToast" style="position:fixed;right:12px;bottom:12px;background:#222;color:#fff;padding:8px 12px;border-radius:6px;display:none;"></div>
+</section>
+
+<section id="purchase-orders" class="page">
+  <h2>Purchase Orders</h2>
+
+  <div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <button id="createPoBtn" class="btn-primary">Create PO</button>
+  </div>
+
+  <div class="card">
+    <table id="poTable">
+      <thead>
+        <tr>
+          <th>PO ID</th>
+          <th>Spare Part</th>
+          <th>Qty</th>
+          <th>Supplier</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+        <!-- USERS PAGE -->
+    <section id="users" class="page">
+      <h2>Users Management</h2>
+      <div class="card">
+        <form id="userForm">
+          <input id="u_email" type="email" placeholder="Email (unique)" required>
+          <input id="u_name" placeholder="Full name" required>
+          <select id="u_role" required>
+            <option value="">Select role</option>
+            <option value="admin">admin</option>
+            <option value="engineer">engineer</option>
+            <option value="tech">tech</option>
+            <option value="manager">manager</option>
+          </select>
+          <input id="u_pass" type="text" placeholder="Password (plain for demo)" required>
+          <input id="u_id" type="hidden" />
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button id="userSaveBtn" type="submit">Save User</button>
+            <button id="userCancelBtn" type="button">Cancel</button>
+          </div>
+        </form>
+
+        <h3 style="margin-top:12px">User List</h3>
+        <table id="usersTable" style="margin-top:8px">
+          <thead><tr><th>Email</th><th>Name</th><th>Role</th><th>Actions</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+    <!-- VENDORS / CONTRACTORS PAGE -->
+    <section id="vendors" class="page">
+      <h2>Vendors & Contractors — إدارة الموردين</h2>
+
+      <div class="card" style="margin-bottom:12px">
+        <form id="vendorForm" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;align-items:end">
+          <div>
+            <label>Name</label>
+            <input id="v_name" placeholder="Vendor / Contractor name" required>
+          </div>
+          <div>
+            <label>Organization code (optional)</label>
+            <input id="v_code" placeholder="e.g., VEND-001">
+          </div>
+
+          <div>
+            <label>Primary contact (email)</label>
+            <input id="v_email" type="email" placeholder="vendor@example.com">
+          </div>
+
+          <div>
+            <label>Endpoint (API / Portal URL)</label>
+            <input id="v_endpoint" placeholder="https://vendor.example/api">
+          </div>
+
+          <div>
+            <label>Auth type</label>
+            <select id="v_auth_type">
+              <option value="">None</option>
+              <option value="bearer">Bearer token</option>
+              <option value="basic">Basic (user:pass)</option>
+              <option value="hmac">HMAC (webhook secret)</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Auth value</label>
+            <input id="v_auth_value" placeholder="token or user:pass">
+          </div>
+
+          <div style="grid-column:1 / -1; display:flex; gap:8px;">
+            <button id="vendorSaveBtn" type="submit">Save Vendor</button>
+            <button id="vendorCancelBtn" type="button">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>Saved Vendors</h3>
+        <table id="vendorsTable" style="margin-top:8px">
+          <thead><tr><th>Code</th><th>Name</th><th>Contact</th><th>Endpoint</th><th>Auth</th><th>Actions</th></tr></thead>
+          <tbody></tbody>
+        </table>
+
+        <div style="margin-top:12px">
+          <h4>Send Work Order to Vendor</h4>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select id="vendorSelectForWO" style="min-width:240px">
+              <option value="">Select vendor...</option>
+            </select>
+            <button id="sendWoBtn" type="button">Send WO (demo/real)</button>
+            <div id="sendWoStatus" style="font-size:13px;color:#333"></div>
+          </div>
+          <div id="sendWoLog" style="margin-top:8px;font-family:monospace;font-size:12px;max-height:180px;overflow:auto;background:#fafafa;border:1px solid #eee;padding:8px;display:none"></div>
+        </div>
+      </div>
+    </section>
+
+        <!-- INTEGRATIONS (HIS / LIS / RIS-PACS) - REPLACEMENT -->
+    <section id="integrations" class="page">
+      <h2>Integrations — (HIS / LIS / RIS-PACS)</h2>
+
+      <div class="card" style="margin-bottom:12px">
+        <form id="integrationForm" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;align-items:end">
+          <div>
+            <label>System Role</label>
+            <select id="int_system_role" required>
+              <option value="his">HIS (Hospital Information System)</option>
+              <option value="lis">LIS (Laboratory Information System)</option>
+              <option value="ris">RIS (Radiology Information System)</option>
+              <option value="pacs">PACS (Imaging Archive)</option>
+              <option value="vendor">Vendor / Contractor Portal</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Integration Name</label>
+            <input id="int_name" placeholder="Name (e.g., HIS-Prod, LIS-Test)" required>
+          </div>
+
+          <div>
+            <label>Protocol / Transport</label>
+            <select id="int_protocol">
+              <option value="rest">REST / JSON (HTTP)</option>
+              <option value="fhir">FHIR (REST / JSON)</option>
+              <option value="hl7_http">HL7 via middleware (REST→MLLP)</option>
+              <option value="mllp">HL7 MLLP (TCP) — requires middleware/gateway</option>
+              <option value="dicomweb">DICOMweb (WADO/QIDO/STOW — HTTP)</option>
+              <option value="dicom_dimse">DICOM DIMSE (C-STORE) — requires middleware/gateway</option>
+              <option value="sftp">SFTP / Batch (CSV/EDI)</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Endpoint / Host</label>
+            <input id="int_endpoint" placeholder="Endpoint URL or host (e.g., https://midware.local/api or 10.0.0.5)">
+          </div>
+
+          <div>
+            <label>Port</label>
+            <input id="int_port" type="number" placeholder="Port (e.g., 8080 or 2575 for MLLP)">
+          </div>
+
+          <div>
+            <label>Path / Service</label>
+            <input id="int_path" placeholder="/api/send-hl7  or /fhir/Patient">
+          </div>
+
+          <div>
+            <label>Auth Type</label>
+            <select id="int_auth_type">
+              <option value="">None</option>
+              <option value="bearer">Bearer token (OAuth2)</option>
+              <option value="basic">Basic (username:pass)</option>
+              <option value="hmac">HMAC (for webhooks)</option>
+              <option value="mTLS">mTLS (client cert) — server side only</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Auth Value / Notes</label>
+            <input id="int_auth_value" placeholder="token or username:password or webhook secret">
+          </div>
+
+          <div style="grid-column: 1 / -1; display:flex;gap:8px">
+            <button id="intSaveBtn" type="submit">Save Integration</button>
+            <button id="intCancelBtn" type="button">Cancel</button>
+            <button id="intTestBtn" type="button">Test Selected</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>Saved Integrations</h3>
+        <table id="integrationsTable" style="margin-top:8px">
+          <thead><tr><th>System</th><th>Name</th><th>Protocol</th><th>Endpoint</th><th>Auth</th><th>Actions</th></tr></thead>
+          <tbody></tbody>
+        </table>
+
+        <div id="integrationTestResult" style="margin-top:12px" class="small"></div>
+        <!-- Run demo sequence controls -->
+        <div style="margin-top:12px; display:flex; gap:8px; align-items:center;">
+          <button id="runDemoBtn" type="button">Run demo sequence (HIS → LIS → RIS/PACS)</button>
+          <div id="demoStatus" style="font-size:13px;color:#333"></div>
+        </div>
+
+        <!-- Demo log (collapsible) -->
+        <div id="demoLogWrapper" style="margin-top:10px; max-height:220px; overflow:auto; background:#fafafa; border:1px solid #eee; padding:8px; font-family:monospace; font-size:12px; display:none;">
+          <div id="demoLog"></div>
+        </div>
+
+       <!-- <div id="integrationHelp" style="margin-top:8px;font-size:13px;color:#444">
+            <b>Notes & Demo behavior:</b>
+            <ul>
+              <li>بسبب قيود المتصفح، بروتوكولات MLLP (HL7 over TCP) وDICOM DIMSE (C-STORE) لا تُرسل فعليًا من المتصفح — لكن زر <em>Test</em> سيجري محاكاة (demo) توضح ACK / C-STORE success لمساعدتك على التحقق الوظيفي دون خادم وسيط.</li>
+              <li>اختبارات DICOMweb (WADO / STOW) وREST تعمل من المتصفح فقط إذا كان الـ endpoint يسمح بـ CORS. إذا واجهت خطأ CORS، ستظهر نتيجة ديمو تلقائية تعرض عنوان WADO افتراضي ونتيجة اختبار مُصاغة لمساعدتك.</li>
+              <li>للتكامل الفعلي في بيئة الإنتاج: يُنصح بنشر middleware (مثل Node.js service أو Mirth Connect) داخل شبكة المستشفى للتعامل مع MLLP وDIMSE و/أو لإخفاء الأسرار/الشهادات؛ الواجهة هنا تسمح بحفظ إعدادات الاختبار وتجربة سلوكات الديمو قبل الربط الحقيقي.</li>
+            </ul>
+        </div> -->
+      </div>
+    </section>
+
+
+    <section id="audit" class="page">
+      <h2>Audit Trails (ISO 13485 / IEC 60601 / JCI)</h2>
+      <div class="card">
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <button id="clearAudit">Clear Logs</button>
+        </div>
+        <div id="auditLog" style="max-height:260px;overflow:auto;font-size:14px;color:#333"></div>
+      </div>
+    </section>
+
+      <section id="equipment-kpi" class="page">
+      <h2>Equipment KPIs (Per Device)</h2>
+      <div class="card">
+        <table id="equipKpiTable"><thead><tr><th>ID</th><th>MTBF (days)</th><th>MTTR (hrs)</th><th>PM Compliance</th><th>Downtime (%)</th><th>Annual Cost</th></tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+  </main>
+  <div id="poModal" class="modal"
+     style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);
+            align-items:center;justify-content:center">
+
+  <div style="background:#fff;padding:16px;border-radius:8px;width:420px">
+    <h3 id="poModalTitle">Create PO</h3>
+
+    <label>Spare Part</label>
+    <select id="po_spare"></select>
+
+    <label>Quantity</label>
+    <input id="po_qty" type="number" min="1">
+
+    <label>Supplier</label>
+    <input id="po_supplier">
+
+    <input type="hidden" id="po_edit_index">
+
+    <div style="margin-top:12px;display:flex;justify-content:flex-end;gap:8px">
+      <button id="poCancelBtn">Cancel</button>
+      <button id="poSaveBtn" class="btn-primary">Save</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
